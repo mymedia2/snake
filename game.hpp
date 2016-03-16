@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "output.hpp"
+#include "io.hpp"
 
 namespace game {
 
@@ -18,7 +18,7 @@ struct Coordinates
 class GameObject
 {
 public:
-	virtual void draw(output::Display&) const = 0;
+	virtual void draw(io::Display&) const = 0;
 	virtual void step() = 0;
 };
 
@@ -26,21 +26,21 @@ class Snake
 	: public GameObject
 {
 public:
-	virtual void draw(output::Display&) const override;
+	virtual void draw(io::Display&) const override;
 	virtual void step() override;
 	std::string name;
 private:
-	std::vector<Coordinates<unsigned>> chain_;
+	std::vector<Coordinates<std::size_t>> sceleton_;
 };
 
 class Food
 	: public GameObject
 {
 public:
-	virtual void draw(output::Display&) const override;
+	virtual void draw(io::Display&) const override;
 	virtual void step() override;
 private:
-	Coordinates<unsigned> position;
+	Coordinates<std::size_t> position;
 };
 
 }	// namespace game
