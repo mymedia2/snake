@@ -11,8 +11,12 @@ template <typename T>
 struct Coordinates
 {
 	typedef T value_type;
-	T x = 0;
-	T y = 0;
+	T x, y;
+	Coordinates(T _x, T _y)
+		: x(_x)
+		, y(_y)
+	{
+	}
 };
 
 class GameObject
@@ -26,6 +30,7 @@ class Snake
 	: public GameObject
 {
 public:
+	Snake(Coordinates<std::size_t> head, Coordinates<std::size_t> tail);
 	virtual void draw(io::Display&) const override;
 	virtual void step() override;
 	std::string name;
@@ -37,6 +42,7 @@ class Food
 	: public GameObject
 {
 public:
+	Food();
 	virtual void draw(io::Display&) const override;
 	virtual void step() override;
 private:
