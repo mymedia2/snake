@@ -3,7 +3,7 @@ SOURCES = $(wildcard [^_]*.cpp)
 OBJECTS = $(SOURCES:%.cpp=%.o)
 DEPENDENCIES = $(SOURCES:%.cpp=%.d)
 
-CXXFLAGS += -g -MMD -std=c++11
+CXXFLAGS += -g -pipe -MMD -std=c++11
 
 .PHONY: all clean run
 
