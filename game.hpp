@@ -1,11 +1,20 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include <exception>
 #include <string>
 #include "io.hpp"
 #include "utils.hpp"
 
 namespace game {
+
+/* Общий класс игровых исключений */
+class GameException
+{
+public:
+	/* Для удобства делаем объект полиморфным */
+	virtual ~GameException();
+};
 
 class GameWorld
 {
@@ -36,8 +45,18 @@ class Snake
 	: public GameObject
 {
 public:
+	/* Класс исключения столкновения змеи со стеной */
+	class BumpWithWall
+		: public GameException
+	{
+	};
+	/* Класс исключения столкновения одной змеи с другой */
+	class BumpWithSnake
+		: public GameException
+	{
+	};
 	/* Подходящим образом размещает новую змейку в указанном мире */
-	Snake(const GameWorld& world, const std::string& name = "");
+	Snake(const GameWorld& world, unsigned speed, const std::string& name = "");
 	/* Рисует змейку на консоли */
 	virtual void draw(io::Display& console) const override;
 	/* Передвигает змейку на шаг вперёд. Генерирует исключение BumpWithWall
@@ -52,9 +71,11 @@ private:
 	void increase_(unsigned = 1);
 	void slide_(unsigned = 1);
 	std::vector<bool> sceleton_;
+	utils::Point direction_;
 	utils::Point head_;
 	utils::Point tail_;
 	std::string name_;
+	unsigned speed_;
 	unsigned score_;
 };
 

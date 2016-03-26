@@ -24,9 +24,15 @@ void _plot_line(io::Display& screen, utils::Point from, utils::Point to)
 
 }	// namespace
 
-game::Snake::Snake(const game::GameWorld& world, const std::string& name)
+game::GameException::~GameException()
+{
+}
+
+game::Snake::Snake(const game::GameWorld& world, unsigned speed, const std::string& name)
 	: GameObject(world)
 	, name_(name)
+	, speed_(speed)
+	, score_(0)
 {
 }
 
