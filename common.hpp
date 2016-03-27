@@ -2,6 +2,7 @@
 #define COMMON_HPP
 
 #include <deque>
+#include <string>
 #include "game.hpp"
 #include "io.hpp"
 #include "utils.hpp"
@@ -31,6 +32,7 @@ public:
 	/* Делает то же, что и предыдущий метод но для константного объекта */
 	const game::GameObject* who_were(utils::Point) const;
 	void draw(io::Display& console) const;
+	void new_snake(const std::string& name = "", unsigned level = 1);
 	/* Размеры мира */
 	static const unsigned rows = 25;
 	static const unsigned columns = 80;

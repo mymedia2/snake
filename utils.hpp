@@ -28,6 +28,12 @@ struct Coordinates
 	T y;
 };
 
+template <typename T>
+inline bool operator== (Coordinates<T> a, Coordinates<T> b);
+
+template <typename T>
+inline bool operator!= (Coordinates<T> a, Coordinates<T> b);
+
 /* Координаты на игровом поле. Используется для задания положения объектов
  * на игровом поле. */
 typedef Coordinates<std::size_t> Point;
@@ -82,6 +88,18 @@ inline utils::Coordinates<T>::Coordinates(T x, T y)
 	: x(x)
 	, y(y)
 {
+}
+
+template <typename T>
+inline bool utils::operator== (Coordinates<T> a, Coordinates<T> b)
+{
+	return a.x == b.x and a.y == b.y;
+}
+
+template <typename T>
+inline bool utils::operator!= (Coordinates<T> a, Coordinates<T> b)
+{
+	return !(a == b);
 }
 
 inline utils::Assertion::Assertion(std::string filename, std::size_t lineno, std::string expression)

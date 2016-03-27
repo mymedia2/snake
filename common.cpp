@@ -1,4 +1,7 @@
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
+#include <string>
 #include "game.hpp"
 #include "utils.hpp"
 
@@ -15,6 +18,8 @@ common::GameWorld::GameWorld()
 	             new game::Wall(*this, game::Wall::Position::south),
 	             new game::Wall(*this, game::Wall::Position::west) })
 {
+	// TODO: заменить на объектно-ориентированную альтернативу
+	std::srand(std::time(nullptr));
 }
 
 // TODO: переделать с использованием unique_ptr
@@ -44,6 +49,12 @@ void common::GameWorld::draw(io::Display& console) const
 	for (game::GameObject* ptr : objects_) {
 		ptr->draw(console);
 	}
+}
+
+void common::GameWorld::new_snake(const std::string& name, unsigned level)
+{
+	// ...
+	objects_.push_back(new game::Food(*this));
 }
 
 common::GameWorld::Container_::size_type common::GameWorld::find_(utils::Point site, bool& success) const

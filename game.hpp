@@ -79,7 +79,7 @@ public:
 	/* Возвращает количество очков, приносимое этим экземпляром еды */
 	virtual unsigned value() const;
 private:
-	utils::Point position;
+	utils::Point position_;
 };
 
 /* Стенка в мире */

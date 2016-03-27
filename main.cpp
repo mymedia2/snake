@@ -8,7 +8,7 @@ int main()
 {
 	io::Display screen;
 	common::GameWorld world;
-	game::Snake liver(world);
+	world.new_snake();
 	world.draw(screen);
 	std::cout << screen << std::endl;
 }

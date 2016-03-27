@@ -31,8 +31,15 @@ bool game::Snake::are_you_here(utils::Point site) const
 	return false;
 }
 
+game::Food::Food(const common::GameWorld& world)
+	: GameObject(world)
+	, position_(utils::Point(std::rand() % (world.rows - 2) + 1, std::rand() % (world.columns - 2) + 1))	// TODO
+{
+}
+
 void game::Food::draw(io::Display& screen) const
 {
+	screen.set_cell('.', position_);
 }
 
 void game::Food::step()
@@ -42,7 +49,7 @@ void game::Food::step()
 
 bool game::Food::are_you_here(utils::Point site) const
 {
-	return false;
+	return site == position_;
 }
 
 unsigned game::Food::value() const
