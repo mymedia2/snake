@@ -16,6 +16,8 @@ class GameObject
 public:
 	/* Создаёт игровой объект в указанном игровом мире */
 	inline GameObject(const common::GameWorld& world);
+	/* Ничего не делает. Требуется для удаления указателей. */
+	virtual ~GameObject();
 	/* Должен отрисовывать объект на консоли. Вызывается, когда требуется
 	 * нарисовать объект заново, или после тика */
 	virtual void draw(io::Display& console) const = 0;
@@ -38,11 +40,13 @@ public:
 	 * Наследует GameException */
 	class Bump;
 	/* Подходящим образом размещает новую змейку в указанном мире */
-	Snake(const common::GameWorld& world, unsigned speed, const std::string& name = "");
+	Snake(const common::GameWorld& world, unsigned speed = 1, const std::string& name = "");
 	/* Рисует змейку на консоли */
 	virtual void draw(io::Display& console) const override;
 	/* Передвигает змейку на шаг вперёд. При столкновении генерирует исключение Bump */
 	virtual void step() override;
+	/* Проверяет, находится ли хотя бы одна часть змейки в заданной точке */
+	virtual bool are_you_here(utils::Point site) const override;
 	/* Возвращет имя змейки */
 	inline const std::string& name() const;
 	/* Возвращает количество очков, набранное змейкой */

@@ -6,6 +6,10 @@
 
 #include "game.hpp"
 
+game::GameObject::~GameObject()
+{
+}
+
 game::Snake::Snake(const common::GameWorld& world, unsigned speed, const std::string& name)
 	: GameObject(world)
 	, name_(name)
@@ -20,6 +24,11 @@ void game::Snake::draw(io::Display& screen) const
 
 void game::Snake::step()
 {
+}
+
+bool game::Snake::are_you_here(utils::Point site) const
+{
+	return false;
 }
 
 void game::Food::draw(io::Display& screen) const

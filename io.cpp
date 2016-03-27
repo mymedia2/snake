@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <iterator>
 #include <valarray>
+#include "utils.hpp"
 
 #include "io.hpp"
 
@@ -15,6 +16,8 @@ io::Display::Display()
 
 void io::Display::set_cell(char value, utils::Point point)
 {
+	assert(0 <= point.x and point.x < rows_);
+	assert(0 <= point.y and point.y < columns_);
 	matrix_[point.x * (columns_ + 1) + point.y] = value;
 }
 

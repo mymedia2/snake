@@ -35,7 +35,7 @@ typedef Coordinates<std::size_t> Point;
 /* Класс ложного инварианта времени выполнения */
 class Assertion
 	: public std::logic_error
-	, public std::bad_exception
+//	, public std::bad_exception
 {
 public:
 	/* Создаёт исключение с информацией о провале */
@@ -53,6 +53,21 @@ public:
 /* Служебная функция. Не предназначена для самостоятельного вызова из
  * клиентского кода */
 inline void _assert(bool, std::string, std::size_t, std::string);
+
+class UnreachableCode
+	: public std::logic_error
+//	, public std::bad_exception
+{
+public:
+	inline UnreachableCode(std::string filename, std::size_t lineno);
+};
+
+#ifndef NDEBUG
+#define unreachable() ( throw ::utils::UnreachableCode(__FILE__, __LINE__) )
+#else
+#define unreachable() ( static_cast<void>(false) )
+#endif
+
 
 }	// namespace utils
 
@@ -79,6 +94,11 @@ inline void utils::_assert(bool invariant, std::string filename, std::size_t lin
 	if (!invariant) {
 		throw Assertion(filename, lineno, expression);
 	}
+}
+
+inline utils::UnreachableCode::UnreachableCode(std::string filename, std::size_t lineno)
+	: std::logic_error("At " + filename + ":" + std::to_string(lineno) + " executed unreachable code")
+{
 }
 
 #endif	// UTILS_HPP
