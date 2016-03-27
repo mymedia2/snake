@@ -13,9 +13,9 @@ io::Display::Display()
 	matrix_[std::slice(columns_, rows_, columns_ + 1)] = '\n';
 }
 
-void io::Display::set_cell(char value, std::size_t row, std::size_t column)
+void io::Display::set_cell(char value, utils::Point point)
 {
-	matrix_[row * (columns_ + 1) + column] = value;
+	matrix_[point.x * (columns_ + 1) + point.y] = value;
 }
 
 std::ostream& io::operator<< (std::ostream& out, const Display& area)
