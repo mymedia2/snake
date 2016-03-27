@@ -3,6 +3,7 @@
 
 #include <deque>
 #include "game.hpp"
+#include "io.hpp"
 #include "utils.hpp"
 
 namespace common {
@@ -21,6 +22,7 @@ class GameWorld
 public:
 	/* Создаёт пустой игровой мир со стенками по краям */
 	GameWorld();
+	~GameWorld();
 	/* Выполняет тик в игре */
 	void tick();
 	/* Ищет и возвращает объект мира с переданными координатами.
@@ -28,8 +30,12 @@ public:
 	game::GameObject* who_were(utils::Point);
 	/* Делает то же, что и предыдущий метод но для константного объекта */
 	const game::GameObject* who_were(utils::Point) const;
+	void draw(io::Display& console) const;
+	/* Размеры мира */
+	static const unsigned rows = 25;
+	static const unsigned columns = 80;
 private:
-	typedef std::deque<game::GameObject> Container_;
+	typedef std::deque<game::GameObject*> Container_;
 	Container_::size_type find_(utils::Point, bool&) const;
 	Container_ objects_;
 };

@@ -64,16 +64,37 @@ class Food
 	: public GameObject
 {
 public:
-	/* Случайным образом размещает новую кусочек еды в указанном мире */
-	Food(const common::GameWorld&);
+	/* Случайным образом размещает новый кусочек еды в указанном мире */
+	Food(const common::GameWorld& world);
 	/* Отрисовывает кусочек еды на консоли */
-	virtual void draw(io::Display&) const override;
+	virtual void draw(io::Display& console) const override;
 	/* Ничего не делает */
 	virtual void step() override;
+	/* Проверяет, лежит ли еда в точке с заданными координатами */
+	virtual bool are_you_here(utils::Point site) const override;
 	/* Возвращает количество очков, приносимое этим экземпляром еды */
 	virtual unsigned value() const;
 private:
 	utils::Point position;
+};
+
+/* Стенка в мире */
+class Wall
+	: public GameObject
+{
+public:
+	/* Пердставляет позицию стенки для убного задания местоположения */
+	enum class Position { north, east, south, west };
+	/* Создаёт стенку на заданной стороне */
+	Wall(const common::GameWorld& world, Position position);
+	/* Рисует стенку где надо */
+	virtual void draw(io::Display& console) const override;
+	/* Ничего не делает */
+	virtual void step() override;
+	/* Находится ли стенка в указанной точке */
+	virtual bool are_you_here(utils::Point site) const override;
+private:
+	Position position_;
 };
 
 }	// namespace game
