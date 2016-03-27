@@ -1,0 +1,6 @@
+namespace common {
+
+class GameWorld;
+class GameException;
+
+}	// namespace common

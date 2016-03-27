@@ -3,25 +3,11 @@
 
 #include <exception>
 #include <string>
+#include "common.fwd"
 #include "io.hpp"
 #include "utils.hpp"
 
 namespace game {
-
-/* Общий класс игровых исключений */
-class GameException
-{
-public:
-	/* Для удобства делаем объект полиморфным */
-	virtual ~GameException();
-};
-
-class GameWorld
-{
-public:
-private:
-	/* ... */
-};
 
 /* Абстрактный класс игрового объекта. Вот примеры объектов, которые
  * могут быть представлены в игре: змейка, еда, бонусы, стенки */
@@ -29,7 +15,7 @@ class GameObject
 {
 public:
 	/* Создаёт игровой объект в указанном игровом мире */
-	inline GameObject(const GameWorld& world);
+	inline GameObject(const common::GameWorld& world);
 	/* Должен отрисовывать объект на консоли. Вызывается, когда требуется
 	 * нарисовать объект заново, или после тика */
 	virtual void draw(io::Display& console) const = 0;
@@ -37,7 +23,7 @@ public:
 	virtual void step() = 0;
 protected:
 	/* Ссылка на игровой мир, в котором действует объект */
-	const GameWorld& world;
+	const common::GameWorld& world;
 };
 
 /* Змейка. То, ради чего всё и делается */
@@ -45,23 +31,14 @@ class Snake
 	: public GameObject
 {
 public:
-	/* Класс исключения столкновения змеи со стеной */
-	class BumpWithWall
-		: public GameException
-	{
-	};
-	/* Класс исключения столкновения одной змеи с другой */
-	class BumpWithSnake
-		: public GameException
-	{
-	};
+	/* Класс исключения столкновения змеи со стеной или с другой змейкой.
+	 * Наследует GameException */
+	class Bump;
 	/* Подходящим образом размещает новую змейку в указанном мире */
-	Snake(const GameWorld& world, unsigned speed, const std::string& name = "");
+	Snake(const common::GameWorld& world, unsigned speed, const std::string& name = "");
 	/* Рисует змейку на консоли */
 	virtual void draw(io::Display& console) const override;
-	/* Передвигает змейку на шаг вперёд. Генерирует исключение BumpWithWall
-	 * при столкновении со стенкой или BumpWithSnake при столкновении с 
-	 * другой змейкой */
+	/* Передвигает змейку на шаг вперёд. При столкновении генерирует исключение Bump */
 	virtual void step() override;
 	/* Возвращет имя змейки */
 	inline const std::string& name() const;
@@ -85,7 +62,7 @@ class Food
 {
 public:
 	/* Случайным образом размещает новую кусочек еды в указанном мире */
-	Food(const GameWorld&);
+	Food(const common::GameWorld&);
 	/* Отрисовывает кусочек еды на консоли */
 	virtual void draw(io::Display&) const override;
 	/* Ничего не делает */
@@ -98,7 +75,7 @@ private:
 
 }	// namespace game
 
-inline game::GameObject::GameObject(const game::GameWorld& world)
+inline game::GameObject::GameObject(const common::GameWorld& world)
 	: world(world)
 {
 }

@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <string>
+#include "common.hpp"
 #include "io.hpp"
 #include "utils.hpp"
 
@@ -23,11 +24,7 @@ void _plot_line(io::Display& screen, utils::Point from, utils::Point to)
 
 }	// namespace
 
-game::GameException::~GameException()
-{
-}
-
-game::Snake::Snake(const game::GameWorld& world, unsigned speed, const std::string& name)
+game::Snake::Snake(const common::GameWorld& world, unsigned speed, const std::string& name)
 	: GameObject(world)
 	, name_(name)
 	, speed_(speed)
