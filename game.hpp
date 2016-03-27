@@ -21,6 +21,9 @@ public:
 	virtual void draw(io::Display& console) const = 0;
 	/* Должен выполнять игровые действия. Вызывается на каждый тик */
 	virtual void step() = 0;
+	/* Должен возвращать true, если объект считает, что он находится
+	 * в указанной точке игрового мира. Иначе false */
+	virtual bool are_you_here(utils::Point site) const = 0;
 protected:
 	/* Ссылка на игровой мир, в котором действует объект */
 	const common::GameWorld& world;
