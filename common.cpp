@@ -53,7 +53,12 @@ void common::GameWorld::draw(io::Display& console) const
 
 void common::GameWorld::new_snake(const std::string& name, unsigned level)
 {
-	// ...
+	objects_.push_back(new game::Snake(*this, level, name));
+	new_food();
+}
+
+void common::GameWorld::new_food()
+{
 	objects_.push_back(new game::Food(*this));
 }
 

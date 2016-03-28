@@ -33,6 +33,7 @@ public:
 	const game::GameObject* who_were(utils::Point) const;
 	void draw(io::Display& console) const;
 	void new_snake(const std::string& name = "", unsigned level = 1);
+	void new_food();
 	/* Размеры мира */
 	static const unsigned rows = 25;
 	static const unsigned columns = 80;
