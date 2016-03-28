@@ -85,7 +85,8 @@ bool game::Snake::are_you_here(utils::Point site) const
 
 game::Food::Food(const common::GameWorld& world)
 	: GameObject(world)
-	, position_(utils::Point(std::rand() % (world.rows - 2) + 1, std::rand() % (world.columns - 2) + 1))	// TODO
+	, position_(std::uniform_int_distribution<utils::Point::value_type>(1, world.rows - 2)(world.random),
+	            std::uniform_int_distribution<utils::Point::value_type>(1, world.columns - 2)(world.random))
 {
 }
 

@@ -10,5 +10,12 @@ int main()
 	common::GameWorld world;
 	world.new_snake();
 	world.draw(screen);
-	std::cout << screen << std::endl;
+	std::cout << io::CLEAR_SCREEN << screen << std::endl;
+	for (;;) {
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		//world.tick();
+		world.new_snake();
+		world.draw(screen);
+		std::cout << io::MOVE_CURSOR_TO_TOP_LEFT << screen << std::endl;
+	}
 }
