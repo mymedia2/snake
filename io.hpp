@@ -2,7 +2,7 @@
 #define IO_HPP
 
 #include "std.hpp"
-
+#include "_forward.hpp"
 #include "utils.hpp"
 
 namespace io {
@@ -20,6 +20,21 @@ private:
 	std::valarray<char> matrix_;
 	static const std::size_t rows_ = 25;
 	static const std::size_t columns_ = 80;
+};
+
+/* Класс-абстрация клавиатуры */
+class Commander
+{
+public:
+	/* Указывает входной поток и управляемую змейку. Также отключает ввод с
+	 * эхом, если было запрошено, и если это возможно */
+	explicit Commander(game::Snake& slave, bool disable_echo = true);
+	/* Обратно включает эхо при вводе */
+	~Commander();
+	/* Извлекает и интерпретирует ввод и, если надо, передаёт команду змейке */
+	void transfer(std::istream& in);
+private:
+	game::Snake& slave_;
 };
 
 /* Выводит всё, что нарисовано на консоли в поток вывода */

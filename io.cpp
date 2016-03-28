@@ -1,5 +1,6 @@
 #include "std.hpp"
 
+#include "game.hpp"
 #include "utils.hpp"
 
 #include "io.hpp"
@@ -18,6 +19,21 @@ void io::Display::set_cell(char value, utils::Point point)
 	assert(0 <= point.y and point.y < columns_);
 	matrix_[point.x * (columns_ + 1) + point.y] = value;
 }
+
+io::Commander::Commander(game::Snake& slave, bool disable_echo)
+	: slave_(slave)
+{
+	if (disable_echo) {
+		std::system("stty -echo");
+	}
+}
+
+io::Commander::~Commander()
+{
+	std::system("stty echo");
+}
+
+io::transfer::
 
 std::ostream& io::operator<< (std::ostream& out, const Display& area)
 {

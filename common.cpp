@@ -44,15 +44,19 @@ void common::GameWorld::draw(io::Display& console) const
 	}
 }
 
-void common::GameWorld::new_snake(const std::string& name, unsigned level)
+game::Snake& common::GameWorld::new_snake(const std::string& name, unsigned level)
 {
-	objects_.push_back(std::make_unique<game::Snake>(*this, level, name));
+	game::Snake* obj = new game::Snake(*this, level, name);
+	objects_.push_back(std::unique_ptr<game::Snake>(obj));
 	new_food();
+	return *obj;
 }
 
-void common::GameWorld::new_food()
+game::Food& common::GameWorld::new_food()
 {
-	objects_.push_back(std::make_unique<game::Food>(*this));
+	game::Food* obj = new game::Food(*this);
+	objects_.push_back(std::unique_ptr<game::Food>(obj));
+	return *obj;
 }
 
 common::GameWorld::Container_::size_type common::GameWorld::find_(utils::Point site, bool& success) const

@@ -2,7 +2,6 @@
 #define COMMON_HPP
 
 #include "std.hpp"
-
 #include "game.hpp"
 #include "io.hpp"
 #include "utils.hpp"
@@ -33,9 +32,9 @@ public:
 	/* Вызывает метод draw для каждого игрового объекта */
 	void draw(io::Display& console) const;
 	/* размещает в мире новую змею и еду для неё */
-	void new_snake(const std::string& name = "", unsigned level = 1);
+	game::Snake& new_snake(const std::string& name = "", unsigned level = 1);
 	/* размещает в мире новую порцию еды */
-	void new_food();
+	game::Food& new_food();
 	/* Генератор случайности */
 	mutable /* FIXME: убрать mutable */ std::default_random_engine random;
 	/* Размеры мира */

@@ -2,8 +2,7 @@
 #define GAME_HPP
 
 #include "std.hpp"
-
-#include "common.fwd"
+#include "_forward.hpp"
 #include "io.hpp"
 #include "utils.hpp"
 
@@ -15,7 +14,7 @@ class GameObject
 {
 public:
 	/* Создаёт игровой объект в указанном игровом мире */
-	inline GameObject(const common::GameWorld& world);
+	inline explicit GameObject(const common::GameWorld& world);
 	/* Ничего не делает. Требуется для удаления указателей. */
 	virtual ~GameObject();
 	/* Должен отрисовывать объект на консоли. Вызывается, когда требуется
@@ -40,7 +39,7 @@ public:
 	 * Наследует GameException */
 	class Bump;
 	/* Подходящим образом размещает новую змейку в указанном мире */
-	Snake(const common::GameWorld& world, unsigned speed = 1, const std::string& name = "");
+	explicit Snake(const common::GameWorld& world, unsigned speed = 1, const std::string& name = "");
 	/* Рисует змейку на консоли */
 	virtual void draw(io::Display& console) const override;
 	/* Передвигает змейку на шаг вперёд. При столкновении генерирует исключение Bump */
@@ -71,7 +70,7 @@ class Food
 {
 public:
 	/* Случайным образом размещает новый кусочек еды в указанном мире */
-	Food(const common::GameWorld& world);
+	explicit Food(const common::GameWorld& world);
 	/* Отрисовывает кусочек еды на консоли */
 	virtual void draw(io::Display& console) const override;
 	/* Ничего не делает */
