@@ -1,8 +1,8 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include <exception>
-#include <string>
+#include "std.hpp"
+
 #include "common.fwd"
 #include "io.hpp"
 #include "utils.hpp"

@@ -1,9 +1,8 @@
 #ifndef IO_HPP
 #define IO_HPP
 
-#include <cstddef>
-#include <iosfwd>
-#include <valarray>
+#include "std.hpp"
+
 #include "utils.hpp"
 
 namespace io {

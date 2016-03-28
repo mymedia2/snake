@@ -1,5 +1,5 @@
-#include <cstdlib>
-#include <string>
+#include "std.hpp"
+
 #include "common.hpp"
 #include "io.hpp"
 #include "utils.hpp"

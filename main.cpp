@@ -1,5 +1,5 @@
-#include <iomanip>
-#include <iostream>
+#include "std.hpp"
+
 #include "common.hpp"
 #include "game.hpp"
 #include "io.hpp"

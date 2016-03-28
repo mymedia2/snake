@@ -1,8 +1,8 @@
 #ifndef COMMON_HPP
 #define COMMON_HPP
 
-#include <deque>
-#include <string>
+#include "std.hpp"
+
 #include "game.hpp"
 #include "io.hpp"
 #include "utils.hpp"

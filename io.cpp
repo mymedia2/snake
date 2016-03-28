@@ -1,7 +1,5 @@
-#include <algorithm>
-#include <cstddef>
-#include <iterator>
-#include <valarray>
+#include "std.hpp"
+
 #include "utils.hpp"
 
 #include "io.hpp"

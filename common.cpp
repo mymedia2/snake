@@ -1,7 +1,5 @@
-#include <algorithm>
-#include <cstdlib>
-#include <ctime>
-#include <string>
+#include "std.hpp"
+
 #include "game.hpp"
 #include "utils.hpp"
 
