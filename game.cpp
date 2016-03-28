@@ -17,60 +17,51 @@ game::Snake::Snake(const common::GameWorld& world, unsigned speed, const std::st
 	, speed_(speed)
 	, score_(0)
 {
-	for (std::size_t j = 10; j < 15; j++) {
-		sceleton_[10][j] = Direction_::rigth;
+	const utils::Point::value_type START_SNAKE_LENGTH = 5;
+	// выбор ориентации змеи
+	Direction_ disposition = static_cast<Direction_>(std::uniform_int_distribution<char>(
+				static_cast<char>(Direction_::top), static_cast<char>(Direction_::rigth))(world.random));
+	// установка головы змеи
+	head_ = utils::Point(std::uniform_int_distribution<utils::Point::value_type>(
+					1 + START_SNAKE_LENGTH, world.rows - 2 - START_SNAKE_LENGTH)(world.random),
+	            std::uniform_int_distribution<utils::Point::value_type>(
+					1 + START_SNAKE_LENGTH, world.columns - 2 - START_SNAKE_LENGTH)(world.random));
+	// заполняем скелет
+	for (utils::Point::value_type i = 0; i < START_SNAKE_LENGTH; i++) {
+		if (disposition == Direction_::top) {
+			sceleton_[head_.x + i][head_.y] = disposition;
+		} else if (disposition == Direction_::bottom) {
+			sceleton_[head_.x - i][head_.y] = disposition;
+		} else if (disposition == Direction_::left) {
+			sceleton_[head_.x][head_.y + i] = disposition;
+		} else if (disposition == Direction_::rigth) {
+			sceleton_[head_.x][head_.y - i] = disposition;
+		} else {
+			unreachable();
+		}
 	}
-	head_ = utils::Point(10, 14);
-	tail_ = utils::Point(10, 10);
+	// устанавливаем хвост
+	if (disposition == Direction_::top) {
+		tail_ = utils::Point(head_.x + START_SNAKE_LENGTH - 1, head_.y);
+	} else if (disposition == Direction_::bottom) {
+		tail_ = utils::Point(head_.x - START_SNAKE_LENGTH + 1, head_.y);
+	} else if (disposition == Direction_::left) {
+		tail_ = utils::Point(head_.x, head_.y + START_SNAKE_LENGTH - 1);
+	} else if (disposition == Direction_::rigth) {
+		tail_ = utils::Point(head_.x, head_.y - START_SNAKE_LENGTH + 1);
+	} else {
+		unreachable();
+	}
 }
 
 void game::Snake::draw(io::Display& screen) const
 {
-	char ch = ' ';
 	// рисуем голову
-	switch (sceleton_[head_.x][head_.y]) {
-	case Direction_::top:
-		ch = '^';
-		break;
-	case Direction_::bottom:
-		ch = 'v';
-		break;
-	case Direction_::rigth:
-		ch = '>';
-		break;
-	case Direction_::left:
-		ch = '<';
-		break;
-	default:
-		unreachable();
-	}
-	assert(ch != ' ');
-	screen.set_cell(ch, head_);
+	screen.set_cell(get_head_symbol_(), head_);
 	// рисуем всё остальное тело
 	utils::Point cursor = head_;
 	while (cursor != tail_) {
-		switch (sceleton_[cursor.x][cursor.y]) {
-		case Direction_::top:
-			ch = '|';
-			cursor.x--;
-			break;
-		case Direction_::bottom:
-			ch = '|';
-			cursor.x++;
-			break;
-		case Direction_::rigth:
-			ch = '-';
-			cursor.y--;
-			break;
-		case Direction_::left:
-			ch = '-';
-			cursor.y++;
-			break;
-		default:
-			unreachable();
-		}
-		assert(ch != ' ');
-		screen.set_cell(ch, cursor);
+		screen.set_cell(get_body_symbol_and_move_(cursor), cursor);
 	}
 }
 
@@ -81,6 +72,44 @@ void game::Snake::step()
 bool game::Snake::are_you_here(utils::Point site) const
 {
 	return sceleton_[site.x][site.y] != Direction_::none;
+}
+
+char game::Snake::get_head_symbol_() const
+{
+	switch (sceleton_[head_.x][head_.y]) {
+	case Direction_::top:
+		return '^';
+	case Direction_::bottom:
+		return 'v';
+	case Direction_::left:
+		return '<';
+	case Direction_::rigth:
+		return '>';
+	default:
+		unreachable();
+		return ' ';
+	}
+}
+
+char game::Snake::get_body_symbol_and_move_(utils::Point& cursor) const
+{
+	switch (sceleton_[cursor.x][cursor.y]) {
+	case Direction_::top:
+		cursor.x++;
+		return '|';
+	case Direction_::bottom:
+		cursor.x--;
+		return '|';
+	case Direction_::left:
+		cursor.y++;
+		return '-';
+	case Direction_::rigth:
+		cursor.y--;
+		return '-';
+	default:
+		unreachable();
+		return ' ';
+	}
 }
 
 game::Food::Food(const common::GameWorld& world)

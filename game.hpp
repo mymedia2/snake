@@ -52,7 +52,9 @@ public:
 	/* Возвращает количество очков, набранное змейкой */
 	inline unsigned score() const;
 private:
-	enum class Direction_ : char { none, top, bottom, rigth, left, top_right, bottom_right, bottom_left, top_left };
+	enum class Direction_ : char { none, top, bottom, left, rigth, top_left, top_right, bottom_left, bottom_rigth };
+	char get_head_symbol_() const;
+	char get_body_symbol_and_move_(utils::Point&) const;
 	void increase_(unsigned = 1);
 	void slide_(unsigned = 1);
 	std::vector<std::vector<Direction_>> sceleton_;
