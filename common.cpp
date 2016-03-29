@@ -10,17 +10,22 @@ common::GameException::~GameException()
 }
 
 common::GameWorld::GameWorld()
-#ifndef NDEBUG
-	: random()
-#else
-	: random(std::chrono::system_clock::now().time_since_epoch().count())
+	: objects_(4)	// TODO: если будет поддерживаться в будущих версиях С++, инициализировать через initializator_list
+#ifdef NDEBUG
+	, random(std::chrono::system_clock::now().time_since_epoch().count())
 #endif
-	, objects_(4)	// TODO: если будет поддерживаться в будущих версиях С++, инициализировать через initializator_list
 {
 	objects_[0] = std::make_unique<game::Wall>(*this, game::Wall::Position::north);
 	objects_[1] = std::make_unique<game::Wall>(*this, game::Wall::Position::east);
 	objects_[2] = std::make_unique<game::Wall>(*this, game::Wall::Position::south);
 	objects_[3] = std::make_unique<game::Wall>(*this, game::Wall::Position::west);
+}
+
+void common::GameWorld::tick()
+{
+	for (auto& obj : objects_) {
+		obj->step();
+	}
 }
 
 game::GameObject* common::GameWorld::who_were(utils::Point site)

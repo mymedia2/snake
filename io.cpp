@@ -33,7 +33,9 @@ io::Commander::~Commander()
 	std::system("stty echo");
 }
 
-io::transfer::
+void io::Commander::transfer(std::istream& in)
+{
+}
 
 std::ostream& io::operator<< (std::ostream& out, const Display& area)
 {

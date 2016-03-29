@@ -10,6 +10,11 @@ game::GameObject::~GameObject()
 {
 }
 
+class game::Snake::Bump
+	: common::GameException
+{
+};
+
 game::Snake::Snake(const common::GameWorld& world, unsigned speed, const std::string& name)
 	: GameObject(world)
 	, sceleton_(world.rows, std::vector<Direction_>(world.columns))
@@ -67,6 +72,21 @@ void game::Snake::draw(io::Display& screen) const
 
 void game::Snake::step()
 {
+	utils::Point next = slide_(head_);
+	const GameObject* obj = world.who_were(next);
+	if (const Food* piece = dynamic_cast<const Food*>(obj)) {
+		sceleton_[next.x][next.y] = sceleton_[head_.x][head_.y];
+		head_ = next;
+		increase_(piece->value());
+		return;
+	}
+	if (obj) {
+		throw Bump();
+	}
+	sceleton_[next.x][next.y] = sceleton_[head_.x][head_.y];
+	head_ = next;
+	sceleton_[tail_.x][tail_.y] = Direction_::none;
+	tail_ = slide_(tail_);
 }
 
 bool game::Snake::are_you_here(utils::Point site) const
@@ -110,6 +130,31 @@ char game::Snake::get_body_symbol_and_move_(utils::Point& cursor) const
 		unreachable();
 		return ' ';
 	}
+}
+
+void game::Snake::increase_(unsigned)
+{
+}
+
+utils::Point game::Snake::slide_(utils::Point body_part)
+{
+	switch (sceleton_[head_.x][head_.y]) {
+	case Direction_::top:
+		body_part.x--;
+		break;
+	case Direction_::bottom:
+		body_part.x++;
+		break;
+	case Direction_::left:
+		body_part.y--;
+		break;
+	case Direction_::rigth:
+		body_part.y++;
+		break;
+	default:
+		unreachable();
+	}
+	return body_part;
 }
 
 game::Food::Food(const common::GameWorld& world)

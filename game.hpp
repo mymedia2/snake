@@ -55,7 +55,7 @@ private:
 	char get_head_symbol_() const;
 	char get_body_symbol_and_move_(utils::Point&) const;
 	void increase_(unsigned = 1);
-	void slide_(unsigned = 1);
+	utils::Point slide_(utils::Point body_part);
 	std::vector<std::vector<Direction_>> sceleton_;
 	utils::Point head_;
 	utils::Point tail_;
