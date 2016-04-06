@@ -1,6 +1,7 @@
 #include "std.hpp"
 
-#include "game.hpp"
+#include "objects.hpp"
+#include "sys.hpp"
 #include "utils.hpp"
 
 #include "io.hpp"
@@ -21,20 +22,33 @@ void io::Display::set_cell(char value, utils::Point point)
 }
 
 io::Commander::Commander(game::Snake& slave, bool disable_echo)
-	: slave_(slave)
+	: commands(std::numeric_limits<unsigned char>::max())
+	, slave_(slave)
 {
+	commands[static_cast<unsigned char>('w')] = game::Snake::Direction::top;
+	commands[static_cast<unsigned char>('a')] = game::Snake::Direction::left;
+	commands[static_cast<unsigned char>('s')] = game::Snake::Direction::bottom;
+	commands[static_cast<unsigned char>('d')] = game::Snake::Direction::rigth;
 	if (disable_echo) {
 		std::system("stty -echo");
+		std::system("stty -icanon min 1");
+		sys::fcntl(0, F_SETFL, O_NONBLOCK);
+		std::setbuf(stdin, nullptr);
 	}
 }
 
 io::Commander::~Commander()
 {
+	std::system("stty icanon");
 	std::system("stty echo");
 }
 
 void io::Commander::transfer(std::istream& in)
 {
+	char buf;
+	if (in.read(&buf, 1)) {
+		slave_.execute(commands[static_cast<unsigned char>(buf)]);
+	}
 }
 
 std::ostream& io::operator<< (std::ostream& out, const Display& area)

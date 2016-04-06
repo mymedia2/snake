@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <chrono>
 #include <cstddef>
+#include <cstdio>
 #include <cstdlib>
 #include <deque>
 #include <exception>
@@ -11,6 +12,7 @@
 #include <iosfwd>
 #include <iostream>
 #include <iterator>
+#include <limits>
 #include <memory>
 #include <random>
 #include <stdexcept>

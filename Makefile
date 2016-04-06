@@ -14,7 +14,7 @@ endif
 ifeq ($(DEBUG), 0)
 CXXFLAGS += -O2 -DNDEBUG
 else
-CXXFLAGS += -g -O0 -Wall
+CXXFLAGS += -g3 -O0 -Wall
 endif
 
 .PHONY: all clean run

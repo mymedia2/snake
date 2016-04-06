@@ -35,6 +35,14 @@ inline bool operator!= (Coordinates<T> a, Coordinates<T> b);
  * на игровом поле. */
 typedef Coordinates<std::size_t> Point;
 
+/* Общий класс игровых исключений */
+class GameException
+{
+public:
+	/* Для удобства делаем объект полиморфным */
+	virtual ~GameException();
+};
+
 /* Класс ложного инварианта времени выполнения */
 class Assertion
 	: public std::logic_error

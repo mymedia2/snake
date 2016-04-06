@@ -3,6 +3,7 @@
 
 #include "std.hpp"
 #include "_forward.hpp"
+#include "objects.hpp"
 #include "utils.hpp"
 
 namespace io {
@@ -27,12 +28,14 @@ class Commander
 {
 public:
 	/* Указывает входной поток и управляемую змейку. Также отключает ввод с
-	 * эхом, если было запрошено, и если это возможно */
-	explicit Commander(game::Snake& slave, bool disable_echo = true);
-	/* Обратно включает эхо при вводе */
+	 * эхом и буферизацию, если было запрошено, и если это возможно */
+	explicit Commander(game::Snake& slave, bool set_console = true);
+	/* Обратно включает эхо при вводе и буферизацию */
 	~Commander();
 	/* Извлекает и интерпретирует ввод и, если надо, передаёт команду змейке */
 	void transfer(std::istream& in);
+	/* Команды */
+	std::vector<game::Snake::Direction> commands;
 private:
 	game::Snake& slave_;
 };

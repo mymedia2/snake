@@ -4,28 +4,23 @@
 #include "io.hpp"
 #include "utils.hpp"
 
-#include "game.hpp"
+#include "objects.hpp"
 
 game::GameObject::~GameObject()
 {
 }
 
-class game::Snake::Bump
-	: common::GameException
-{
-};
-
 game::Snake::Snake(const common::GameWorld& world, unsigned speed, const std::string& name)
 	: GameObject(world)
-	, sceleton_(world.rows, std::vector<Direction_>(world.columns))
+	, sceleton_(world.rows, std::vector<Direction>(world.columns))
 	, name_(name)
 	, speed_(speed)
 	, score_(0)
 {
 	const utils::Point::value_type START_SNAKE_LENGTH = 5;
 	// выбор ориентации змеи
-	Direction_ disposition = static_cast<Direction_>(std::uniform_int_distribution<char>(
-				static_cast<char>(Direction_::top), static_cast<char>(Direction_::rigth))(world.random));
+	Direction disposition = static_cast<Direction>(std::uniform_int_distribution<char>(
+				static_cast<char>(Direction::top), static_cast<char>(Direction::rigth))(world.random));
 	// установка головы змеи
 	head_ = utils::Point(std::uniform_int_distribution<utils::Point::value_type>(
 					1 + START_SNAKE_LENGTH, world.rows - 2 - START_SNAKE_LENGTH)(world.random),
@@ -33,26 +28,26 @@ game::Snake::Snake(const common::GameWorld& world, unsigned speed, const std::st
 					1 + START_SNAKE_LENGTH, world.columns - 2 - START_SNAKE_LENGTH)(world.random));
 	// заполняем скелет
 	for (utils::Point::value_type i = 0; i < START_SNAKE_LENGTH; i++) {
-		if (disposition == Direction_::top) {
+		if (disposition == Direction::top) {
 			sceleton_[head_.x + i][head_.y] = disposition;
-		} else if (disposition == Direction_::bottom) {
+		} else if (disposition == Direction::bottom) {
 			sceleton_[head_.x - i][head_.y] = disposition;
-		} else if (disposition == Direction_::left) {
+		} else if (disposition == Direction::left) {
 			sceleton_[head_.x][head_.y + i] = disposition;
-		} else if (disposition == Direction_::rigth) {
+		} else if (disposition == Direction::rigth) {
 			sceleton_[head_.x][head_.y - i] = disposition;
 		} else {
 			unreachable();
 		}
 	}
 	// устанавливаем хвост
-	if (disposition == Direction_::top) {
+	if (disposition == Direction::top) {
 		tail_ = utils::Point(head_.x + START_SNAKE_LENGTH - 1, head_.y);
-	} else if (disposition == Direction_::bottom) {
+	} else if (disposition == Direction::bottom) {
 		tail_ = utils::Point(head_.x - START_SNAKE_LENGTH + 1, head_.y);
-	} else if (disposition == Direction_::left) {
+	} else if (disposition == Direction::left) {
 		tail_ = utils::Point(head_.x, head_.y + START_SNAKE_LENGTH - 1);
-	} else if (disposition == Direction_::rigth) {
+	} else if (disposition == Direction::rigth) {
 		tail_ = utils::Point(head_.x, head_.y - START_SNAKE_LENGTH + 1);
 	} else {
 		unreachable();
@@ -85,25 +80,33 @@ void game::Snake::step()
 	}
 	sceleton_[next.x][next.y] = sceleton_[head_.x][head_.y];
 	head_ = next;
-	sceleton_[tail_.x][tail_.y] = Direction_::none;
+	sceleton_[tail_.x][tail_.y] = Direction::none;
 	tail_ = slide_(tail_);
 }
 
 bool game::Snake::are_you_here(utils::Point site) const
 {
-	return sceleton_[site.x][site.y] != Direction_::none;
+	return sceleton_[site.x][site.y] != Direction::none;
+}
+
+void game::Snake::execute(Direction command)
+{
+	if (command != Direction::none) {
+		/* FIXME: запретить змее разворачиваться */
+		sceleton_[head_.x][head_.y] = command;
+	}
 }
 
 char game::Snake::get_head_symbol_() const
 {
 	switch (sceleton_[head_.x][head_.y]) {
-	case Direction_::top:
+	case Direction::top:
 		return '^';
-	case Direction_::bottom:
+	case Direction::bottom:
 		return 'v';
-	case Direction_::left:
+	case Direction::left:
 		return '<';
-	case Direction_::rigth:
+	case Direction::rigth:
 		return '>';
 	default:
 		unreachable();
@@ -114,16 +117,16 @@ char game::Snake::get_head_symbol_() const
 char game::Snake::get_body_symbol_and_move_(utils::Point& cursor) const
 {
 	switch (sceleton_[cursor.x][cursor.y]) {
-	case Direction_::top:
+	case Direction::top:
 		cursor.x++;
 		return '|';
-	case Direction_::bottom:
+	case Direction::bottom:
 		cursor.x--;
 		return '|';
-	case Direction_::left:
+	case Direction::left:
 		cursor.y++;
 		return '-';
-	case Direction_::rigth:
+	case Direction::rigth:
 		cursor.y--;
 		return '-';
 	default:
@@ -139,16 +142,16 @@ void game::Snake::increase_(unsigned)
 utils::Point game::Snake::slide_(utils::Point body_part)
 {
 	switch (sceleton_[head_.x][head_.y]) {
-	case Direction_::top:
+	case Direction::top:
 		body_part.x--;
 		break;
-	case Direction_::bottom:
+	case Direction::bottom:
 		body_part.x++;
 		break;
-	case Direction_::left:
+	case Direction::left:
 		body_part.y--;
 		break;
-	case Direction_::rigth:
+	case Direction::rigth:
 		body_part.y++;
 		break;
 	default:
