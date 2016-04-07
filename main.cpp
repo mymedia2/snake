@@ -15,6 +15,7 @@ try {
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		keyboard.transfer(std::cin);
 		world.tick();
+		screen.clear();
 		world.draw(screen);
 		std::cout << io::MOVE_CURSOR_TO_TOP_LEFT << screen << std::endl;
 	}

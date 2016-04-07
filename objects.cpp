@@ -17,6 +17,7 @@ game::Snake::Snake(const common::GameWorld& world, unsigned speed, const std::st
 	, speed_(speed)
 	, score_(0)
 {
+	/* FIXME: всё плохо, если нету места, и мы случайно наехали на другие объекты */
 	const utils::Point::value_type START_SNAKE_LENGTH = 5;
 	// выбор ориентации змеи
 	Direction disposition = static_cast<Direction>(std::uniform_int_distribution<char>(
@@ -56,6 +57,7 @@ game::Snake::Snake(const common::GameWorld& world, unsigned speed, const std::st
 
 void game::Snake::draw(io::Display& screen) const
 {
+	dump_sceleton_(std::clog);
 	// рисуем голову
 	screen.set_cell(get_head_symbol_(), head_);
 	// рисуем всё остальное тело
@@ -158,6 +160,19 @@ utils::Point game::Snake::slide_(utils::Point body_part)
 		unreachable();
 	}
 	return body_part;
+}
+
+void game::Snake::dump_sceleton_(std::ostream& out) const
+{
+#ifndef NDEBUG
+	for (auto row : sceleton_) {
+		for (Direction el : row) {
+			out << static_cast<int>(el);
+		}
+		out << '\n';
+	}
+	out << std::endl;
+#endif
 }
 
 game::Food::Food(const common::GameWorld& world)

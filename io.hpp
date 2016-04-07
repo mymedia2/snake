@@ -18,6 +18,7 @@ public:
 	Display();
 	/* Устанавливает в точке заданное значение */
 	void set_cell(char value, utils::Point point);
+	void clear();
 private:
 	std::valarray<char> matrix_;
 	static const std::size_t rows_ = 25;

@@ -61,6 +61,7 @@ private:
 	char get_body_symbol_and_move_(utils::Point&) const;
 	void increase_(unsigned = 1);
 	utils::Point slide_(utils::Point body_part);
+	void dump_sceleton_(std::ostream&) const;
 	std::vector<std::vector<Direction>> sceleton_;
 	utils::Point head_;
 	utils::Point tail_;
