@@ -1,13 +1,9 @@
 #include "std.hpp"
 
-#include "game.hpp"
+#include "objects.hpp"
 #include "utils.hpp"
 
 #include "common.hpp"
-
-common::GameException::~GameException()
-{
-}
 
 common::GameWorld::GameWorld()
 	: objects_(4)	// TODO: если будет поддерживаться в будущих версиях С++, инициализировать через initializator_list

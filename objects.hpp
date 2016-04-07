@@ -3,7 +3,6 @@
 
 #include "std.hpp"
 #include "_forward.hpp"
-#include "io.hpp"
 #include "utils.hpp"
 
 namespace game {
@@ -37,7 +36,12 @@ class Snake
 public:
 	/* Класс исключения столкновения змеи со стеной или с другой змейкой.
 	 * Наследует GameException */
-	class Bump;
+	class Bump
+		: utils::GameException
+	{
+	};
+	/* Направление движения змейки */
+	enum class Direction : char { none, top, bottom, left, rigth, top_left, top_right, bottom_left, bottom_rigth };
 	/* Подходящим образом размещает новую змейку в указанном мире */
 	explicit Snake(const common::GameWorld& world, unsigned speed = 1, const std::string& name = "");
 	/* Рисует змейку на консоли */
@@ -50,13 +54,14 @@ public:
 	inline const std::string& name() const;
 	/* Возвращает количество очков, набранное змейкой */
 	inline unsigned score() const;
+	/* Выплняет команду от клавиатуры */
+	void execute(Direction command);
 private:
-	enum class Direction_ : char { none, top, bottom, left, rigth, top_left, top_right, bottom_left, bottom_rigth };
 	char get_head_symbol_() const;
 	char get_body_symbol_and_move_(utils::Point&) const;
 	void increase_(unsigned = 1);
 	utils::Point slide_(utils::Point body_part);
-	std::vector<std::vector<Direction_>> sceleton_;
+	std::vector<std::vector<Direction>> sceleton_;
 	utils::Point head_;
 	utils::Point tail_;
 	std::string name_;

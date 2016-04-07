@@ -2,19 +2,11 @@
 #define COMMON_HPP
 
 #include "std.hpp"
-#include "game.hpp"
+#include "objects.hpp"
 #include "io.hpp"
 #include "utils.hpp"
 
 namespace common {
-
-/* Общий класс игровых исключений */
-class GameException
-{
-public:
-	/* Для удобства делаем объект полиморфным */
-	virtual ~GameException();
-};
 
 /* Игровой мир, где живут все объекты игры */
 class GameWorld
