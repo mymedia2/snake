@@ -66,6 +66,7 @@ private:
 	std::vector<std::vector<Direction>> sceleton_;
 	utils::Point head_;
 	utils::Point tail_;
+	Direction where_are_going_;
 	std::string name_;
 	unsigned speed_;
 	unsigned score_;
