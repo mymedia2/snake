@@ -58,9 +58,10 @@ public:
 	void execute(Direction command);
 private:
 	char get_head_symbol_() const;
-	char get_body_symbol_and_move_(utils::Point&) const;
+	char get_body_symbol_(utils::Point) const;
+	utils::Point move_(utils::Point) const;
 	void increase_(unsigned = 1);
-	utils::Point slide_(utils::Point body_part);
+	utils::Point slide_(utils::Point body_part) const;
 	void dump_sceleton_(std::ostream&) const;
 	std::vector<std::vector<Direction>> sceleton_;
 	utils::Point head_;

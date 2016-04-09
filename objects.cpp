@@ -63,7 +63,8 @@ void game::Snake::draw(io::Display& screen) const
 	// рисуем всё остальное тело
 	utils::Point cursor = head_;
 	while (cursor != tail_) {
-		screen.set_cell(get_body_symbol_and_move_(cursor), cursor);
+		cursor = move_(cursor);
+		screen.set_cell(get_body_symbol_(cursor), cursor);
 	}
 }
 
@@ -71,19 +72,18 @@ void game::Snake::step()
 {
 	utils::Point next = slide_(head_);
 	const GameObject* obj = world.who_were(next);
-	if (const Food* piece = dynamic_cast<const Food*>(obj)) {
+	if (const Wall* obstacle = dynamic_cast<const Wall*>(obj)) {
+		throw Bump();
+	} else if (const Food* piece = dynamic_cast<const Food*>(obj)) {
 		sceleton_[next.x][next.y] = sceleton_[head_.x][head_.y];
 		head_ = next;
 		increase_(piece->value());
-		return;
+	} else {
+		sceleton_[next.x][next.y] = sceleton_[head_.x][head_.y];
+		head_ = next;
+		sceleton_[tail_.x][tail_.y] = Direction::none;
+		tail_ = slide_(tail_);
 	}
-	if (obj) {
-		throw Bump();
-	}
-	sceleton_[next.x][next.y] = sceleton_[head_.x][head_.y];
-	head_ = next;
-	sceleton_[tail_.x][tail_.y] = Direction::none;
-	tail_ = slide_(tail_);
 }
 
 bool game::Snake::are_you_here(utils::Point site) const
@@ -116,20 +116,14 @@ char game::Snake::get_head_symbol_() const
 	}
 }
 
-char game::Snake::get_body_symbol_and_move_(utils::Point& cursor) const
+char game::Snake::get_body_symbol_(utils::Point cursor) const
 {
 	switch (sceleton_[cursor.x][cursor.y]) {
 	case Direction::top:
-		cursor.x++;
-		return '|';
 	case Direction::bottom:
-		cursor.x--;
 		return '|';
 	case Direction::left:
-		cursor.y++;
-		return '-';
 	case Direction::rigth:
-		cursor.y--;
 		return '-';
 	default:
 		unreachable();
@@ -137,11 +131,32 @@ char game::Snake::get_body_symbol_and_move_(utils::Point& cursor) const
 	}
 }
 
+utils::Point game::Snake::move_(utils::Point cursor) const
+{
+	switch (sceleton_[cursor.x][cursor.y]) {
+	case Direction::top:
+		cursor.x++;
+		break;
+	case Direction::bottom:
+		cursor.x--;
+		break;
+	case Direction::left:
+		cursor.y++;
+		break;
+	case Direction::rigth:
+		cursor.y--;
+		break;
+	default:
+		unreachable();
+	}
+	return cursor;
+}
+
 void game::Snake::increase_(unsigned)
 {
 }
 
-utils::Point game::Snake::slide_(utils::Point body_part)
+utils::Point game::Snake::slide_(utils::Point body_part) const
 {
 	switch (sceleton_[head_.x][head_.y]) {
 	case Direction::top:
