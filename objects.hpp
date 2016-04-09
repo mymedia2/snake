@@ -13,7 +13,7 @@ class GameObject
 {
 public:
 	/* Создаёт игровой объект в указанном игровом мире */
-	inline explicit GameObject(const common::GameWorld& world);
+	inline explicit GameObject(common::GameWorld& world);
 	/* Ничего не делает. Требуется для удаления указателей. */
 	virtual ~GameObject();
 	/* Должен отрисовывать объект на консоли. Вызывается, когда требуется
@@ -26,7 +26,7 @@ public:
 	virtual bool are_you_here(utils::Point site) const = 0;
 protected:
 	/* Ссылка на игровой мир, в котором действует объект */
-	const common::GameWorld& world;
+	common::GameWorld& world;
 };
 
 /* Змейка. То, ради чего всё и делается */
@@ -43,7 +43,7 @@ public:
 	/* Направление движения змейки */
 	enum class Direction : char { none, top, bottom, left, rigth, top_left, top_right, bottom_left, bottom_rigth };
 	/* Подходящим образом размещает новую змейку в указанном мире */
-	explicit Snake(const common::GameWorld& world, unsigned speed = 1, const std::string& name = "");
+	explicit Snake(common::GameWorld& world, unsigned speed = 1, const std::string& name = "");
 	/* Рисует змейку на консоли */
 	virtual void draw(io::Display& console) const override;
 	/* Передвигает змейку на шаг вперёд. При столкновении генерирует исключение Bump */
@@ -78,7 +78,7 @@ class Food
 {
 public:
 	/* Случайным образом размещает новый кусочек еды в указанном мире */
-	explicit Food(const common::GameWorld& world);
+	explicit Food(common::GameWorld& world);
 	/* Отрисовывает кусочек еды на консоли */
 	virtual void draw(io::Display& console) const override;
 	/* Ничего не делает */
@@ -99,7 +99,7 @@ public:
 	/* Пердставляет позицию стенки для убного задания местоположения */
 	enum class Position { north, east, south, west };
 	/* Создаёт стенку на заданной стороне */
-	Wall(const common::GameWorld& world, Position position);
+	Wall(common::GameWorld& world, Position position);
 	/* Рисует стенку где надо */
 	virtual void draw(io::Display& console) const override;
 	/* Ничего не делает */
@@ -112,7 +112,7 @@ private:
 
 }	// namespace game
 
-inline game::GameObject::GameObject(const common::GameWorld& world)
+inline game::GameObject::GameObject(common::GameWorld& world)
 	: world(world)
 {
 }

@@ -10,7 +10,7 @@ game::GameObject::~GameObject()
 {
 }
 
-game::Snake::Snake(const common::GameWorld& world, unsigned speed, const std::string& name)
+game::Snake::Snake(common::GameWorld& world, unsigned speed, const std::string& name)
 	: GameObject(world)
 	, sceleton_(world.rows, std::vector<Direction>(world.columns))
 	, name_(name)
@@ -194,8 +194,10 @@ utils::Point game::Snake::move_(utils::Point cursor) const
 	return cursor;
 }
 
-void game::Snake::increase_(unsigned)
+void game::Snake::increase_(unsigned value)
 {
+	score_ += value;
+	world.new_food();
 }
 
 utils::Point game::Snake::slide_(utils::Point body_part) const
@@ -232,7 +234,7 @@ void game::Snake::dump_sceleton_(std::ostream& out) const
 #endif
 }
 
-game::Food::Food(const common::GameWorld& world)
+game::Food::Food(common::GameWorld& world)
 	: GameObject(world)
 	, position_(std::uniform_int_distribution<utils::Point::value_type>(1, world.rows - 2)(world.random),
 	            std::uniform_int_distribution<utils::Point::value_type>(1, world.columns - 2)(world.random))
@@ -259,7 +261,7 @@ unsigned game::Food::value() const
 	return 1;
 }
 
-game::Wall::Wall(const common::GameWorld& world, game::Wall::Position position)
+game::Wall::Wall(common::GameWorld& world, game::Wall::Position position)
 	: GameObject(world)
 	, position_(position)
 {
